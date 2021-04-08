@@ -2,9 +2,7 @@ package main
 
 import (
 	"context"
-	"fmt"
 	"io"
-	"log"
 
 	"github.com/k88t76/GraphQL-gRPC-demo/article/pb"
 	"google.golang.org/grpc"
@@ -35,9 +33,10 @@ func (c *Client) Close() {
 	c.conn.Close()
 }
 
+/*	gRPCサーバーの動作確認用
+
 func main() {
 	c, _ := NewClient("localhost:8080")
-	/*
 		input := &pb.CreateInput{
 			Author:  "gopher3",
 			Title:   "poyo",
@@ -48,17 +47,16 @@ func main() {
 			log.Fatal(err)
 		}
 		fmt.Printf("CreateArticle Response: %v", res)
-	*/
 
-	/*
+
 		var id int64 = 1
 		res, err := c.service.ReadArticle(context.Background(), &pb.ReadArticleRequest{Id: id})
 		if err != nil {
 			log.Fatal(err)
 		}
 		fmt.Printf("ReadArticle Response: %v\n", res)
-	*/
-	/*
+
+
 		article := &pb.Article{
 			Id:      2,
 			Author:  "gopher2",
@@ -70,30 +68,31 @@ func main() {
 			log.Fatal(err)
 		}
 		fmt.Printf("UpdateArticle Response: %v\n", res)
-	*/
-	/*
+
 		var id int64 = 4
 		res, err := c.service.DeleteArticle(context.Background(), &pb.DeleteArticleRequest{Id: id})
 		if err != nil {
 			log.Fatal(err)
 		}
 		fmt.Printf("Deleted Article id = %v\n", res.Id)
-	*/
-	stream, err := c.service.ListArticle(context.Background(), &pb.ListArticleRequest{})
-	if err != nil {
-		log.Fatal(err)
-	}
-	for {
-		res, err := stream.Recv()
-		if err == io.EOF {
-			break
-		}
+
+		stream, err := c.service.ListArticle(context.Background(), &pb.ListArticleRequest{})
 		if err != nil {
 			log.Fatal(err)
 		}
-		fmt.Println(res.GetArticle())
-	}
+		for {
+			res, err := stream.Recv()
+			if err == io.EOF {
+				break
+			}
+			if err != nil {
+				log.Fatal(err)
+			}
+			fmt.Println(res.GetArticle())
+		}
+
 }
+*/
 
 func (c *Client) CreateArticle(ctx context.Context, input *pb.CreateInput) (*Article, error) {
 	res, err := c.service.CreateArticle(
