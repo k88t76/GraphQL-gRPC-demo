@@ -101,3 +101,21 @@ func (*server) ReadArticle(ctx context.Context, req *pb.ReadArticleRequest) (*pb
 	}, nil
 
 }
+
+func (*server) UpdateArticle(ctx context.Context, req *pb.UpdateArticleRequest) (*pb.UpdateArticleResponse, error) {
+	article := req.GetArticle()
+
+	cmd := "UPDATE articles SET author = ?, title = ?, content = ? WHERE id = ?"
+	_, err := db.Exec(cmd, article.Author, article.Title, article.Content, article.Id)
+	if err != nil {
+		return nil, err
+	}
+	return &pb.UpdateArticleResponse{
+		Article: &pb.Article{
+			Id:      article.Id,
+			Author:  article.Author,
+			Title:   article.Title,
+			Content: article.Content,
+		},
+	}, nil
+}
