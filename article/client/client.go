@@ -5,6 +5,7 @@ import (
 	"io"
 
 	"github.com/k88t76/GraphQL-gRPC-demo/article/pb"
+	"github.com/k88t76/GraphQL-gRPC-demo/graph/model"
 	"google.golang.org/grpc"
 )
 
@@ -144,12 +145,12 @@ func (c *Client) DeleteArticle(ctx context.Context, id int64) (int64, error) {
 	return res.Id, nil
 }
 
-func (c *Client) ListArticle(ctx context.Context) ([]*Article, error) {
+func (c *Client) ListArticle(ctx context.Context) ([]*model.Article, error) {
 	res, err := c.service.ListArticle(ctx, &pb.ListArticleRequest{})
 	if err != nil {
 		return nil, err
 	}
-	var articles []*Article
+	var articles []*model.Article
 	for {
 		r, err := res.Recv()
 		if err == io.EOF {
@@ -158,8 +159,8 @@ func (c *Client) ListArticle(ctx context.Context) ([]*Article, error) {
 		if err != nil {
 			return nil, err
 		}
-		articles = append(articles, &Article{
-			ID:      r.Article.Id,
+		articles = append(articles, &model.Article{
+			ID:      int(r.Article.Id),
 			Author:  r.Article.Author,
 			Title:   r.Article.Title,
 			Content: r.Article.Content,

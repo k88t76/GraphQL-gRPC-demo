@@ -23,7 +23,6 @@ func (r *Resolver) Query() generated.QueryResolver {
 }
 
 type mutationResolver struct{ *Resolver }
-type queryResolver struct{ *Resolver }
 
 func (m *mutationResolver) CreateArticle(ctx context.Context, input model.CreateInput) (*model.Article, error) {
 	ctx, cancel := context.WithTimeout(ctx, 3*time.Second)
@@ -48,17 +47,58 @@ func (m *mutationResolver) CreateArticle(ctx context.Context, input model.Create
 }
 
 func (m *mutationResolver) UpdateArticle(ctx context.Context, input model.UpdateInput) (*model.Article, error) {
-	return nil, nil
+	ctx, cancel := context.WithTimeout(ctx, 3*time.Second)
+	defer cancel()
+
+	article, err := m.Server.ArticleClient.UpdateArticle(
+		ctx,
+		&pb.Article{
+			Id:      int64(input.ID),
+			Author:  input.Author,
+			Title:   input.Title,
+			Content: input.Content,
+		})
+	if err != nil {
+		return nil, err
+	}
+
+	return &model.Article{
+		ID:      int(article.ID),
+		Author:  article.Author,
+		Title:   article.Title,
+		Content: article.Content,
+	}, nil
 }
 
 func (m *mutationResolver) DeleteArticle(ctx context.Context, id int) (*model.Article, error) {
 	return nil, nil
 }
 
+type queryResolver struct{ *Resolver }
+
 func (q *queryResolver) Article(ctx context.Context, id int) (*model.Article, error) {
-	return nil, nil
+	ctx, cancel := context.WithTimeout(ctx, 3*time.Second)
+	defer cancel()
+
+	article, err := q.Server.ArticleClient.ReadArticle(ctx, int64(id))
+	if err != nil {
+		return nil, err
+	}
+	return &model.Article{
+		ID:      int(article.ID),
+		Author:  article.Author,
+		Title:   article.Title,
+		Content: article.Content,
+	}, nil
 }
 
 func (q *queryResolver) Articles(ctx context.Context) ([]*model.Article, error) {
-	return nil, nil
+	ctx, cancel := context.WithTimeout(ctx, 3*time.Second)
+	defer cancel()
+
+	articles, err := q.Server.ArticleClient.ListArticle(ctx)
+	if err != nil {
+		return nil, err
+	}
+	return articles, nil
 }
