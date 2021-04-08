@@ -1,4 +1,4 @@
-package server
+package main
 
 import (
 	"context"
@@ -8,6 +8,8 @@ import (
 
 	"github.com/k88t76/GraphQL-gRPC-demo/article/pb"
 	"google.golang.org/grpc"
+
+	_ "github.com/mattn/go-sqlite3"
 )
 
 type server struct {
@@ -24,7 +26,7 @@ var db *sql.DB
 func main() {
 	// sqliteに接続
 	var err error
-	db, err = sql.Open("sqlite3", "./blog/blog.sql")
+	db, err = sql.Open("sqlite3", "./article/article.sql")
 	if err != nil {
 		log.Fatalln(err)
 	}
@@ -52,6 +54,8 @@ func main() {
 
 	//サーバーにarticleサービスを登録
 	pb.RegisterArticleServiceServer(s, &server{})
+
+	log.Println("Listening on port 8080...")
 
 	//articleサーバーを起動
 	if err := s.Serve(lis); err != nil {
