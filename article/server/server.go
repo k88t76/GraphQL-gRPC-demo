@@ -81,3 +81,23 @@ func (*server) CreateArticle(ctx context.Context, req *pb.CreateArticleRequest) 
 		},
 	}, nil
 }
+
+func (*server) ReadArticle(ctx context.Context, req *pb.ReadArticleRequest) (*pb.ReadArticleResponse, error) {
+	id := req.GetId()
+	cmd := "SELECT * FROM articles WHERE id = ?"
+	row := db.QueryRow(cmd, id)
+	var a pb.Article
+	err := row.Scan(&a.Id, &a.Author, &a.Title, &a.Content)
+	if err != nil {
+		return nil, err
+	}
+	return &pb.ReadArticleResponse{
+		Article: &pb.Article{
+			Id:      a.Id,
+			Author:  a.Author,
+			Title:   a.Title,
+			Content: a.Content,
+		},
+	}, nil
+
+}
