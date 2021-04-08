@@ -135,23 +135,21 @@ func (*server) DeleteArticle(ctx context.Context, req *pb.DeleteArticleRequest) 
 	return &pb.DeleteArticleResponse{Id: id}, nil
 }
 
-func (*server) ListArticle(ctx context.Context, req *pb.ListArticleRequest) (*pb.ListArticleResponse, error) {
-	var articles []*pb.Article
+func (*server) ListArticle(req *pb.ListArticleRequest, stream pb.ArticleService_ListArticleServer) error {
 	cmd := "SELECT * FROM articles"
 	rows, err := db.Query(cmd)
-	defer rows.Close()
 	if err != nil {
-		return nil, err
+		return err
 	}
+	defer rows.Close()
+
 	for rows.Next() {
-		var a *pb.Article
+		var a pb.Article
 		err := rows.Scan(&a.Id, &a.Author, &a.Title, &a.Content)
 		if err != nil {
-			return nil, err
+			return err
 		}
-		articles = append(articles, a)
+		stream.Send(&pb.ListArticleResponse{Article: &a})
 	}
-	return &pb.ListArticleResponse{
-		Articles: articles,
-	}, nil
+	return nil
 }

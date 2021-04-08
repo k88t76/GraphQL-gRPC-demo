@@ -2,6 +2,9 @@ package main
 
 import (
 	"context"
+	"fmt"
+	"io"
+	"log"
 
 	"github.com/k88t76/GraphQL-gRPC-demo/article/pb"
 	"google.golang.org/grpc"
@@ -76,6 +79,20 @@ func main() {
 		}
 		fmt.Printf("Deleted Article id = %v\n", res.Id)
 	*/
+	stream, err := c.service.ListArticle(context.Background(), &pb.ListArticleRequest{})
+	if err != nil {
+		log.Fatal(err)
+	}
+	for {
+		res, err := stream.Recv()
+		if err == io.EOF {
+			break
+		}
+		if err != nil {
+			log.Fatal(err)
+		}
+		fmt.Println(res.GetArticle())
+	}
 }
 
 func (c *Client) CreateArticle(ctx context.Context, input *pb.CreateInput) (*Article, error) {
@@ -126,4 +143,28 @@ func (c *Client) DeleteArticle(ctx context.Context, id int64) (int64, error) {
 		return 0, err
 	}
 	return res.Id, nil
+}
+
+func (c *Client) ListArticle(ctx context.Context) ([]*Article, error) {
+	res, err := c.service.ListArticle(ctx, &pb.ListArticleRequest{})
+	if err != nil {
+		return nil, err
+	}
+	var articles []*Article
+	for {
+		r, err := res.Recv()
+		if err == io.EOF {
+			break
+		}
+		if err != nil {
+			return nil, err
+		}
+		articles = append(articles, &Article{
+			ID:      r.Article.Id,
+			Author:  r.Article.Author,
+			Title:   r.Article.Title,
+			Content: r.Article.Content,
+		})
+	}
+	return articles, nil
 }
