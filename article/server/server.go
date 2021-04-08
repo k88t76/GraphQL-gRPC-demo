@@ -36,8 +36,8 @@ func main() {
 	cmd := `CREATE TABLE IF NOT EXISTS articles(
 		id INTEGER PRIMARY KEY AUTOINCREMENT,
 		author STRING,
-		content STRING,
-		title STRING)`
+		title STRING,
+		content STRING)`
 
 	_, err = db.Exec(cmd)
 	if err != nil {
