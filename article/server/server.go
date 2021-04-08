@@ -1,15 +1,14 @@
 package server
 
 import (
+	"context"
 	"database/sql"
 	"log"
 	"net"
 
-	"github.com/k88t76/gg-demo/account/pb"
+	"github.com/k88t76/GraphQL-gRPC-demo/article/pb"
 	"google.golang.org/grpc"
 )
-
-var db *sql.DB
 
 type server struct {
 }
@@ -19,6 +18,8 @@ type articleInput struct {
 	Title   string `json:"title"`
 	Content string `json:"content"`
 }
+
+var db *sql.DB
 
 func main() {
 	// sqliteに接続
@@ -50,11 +51,33 @@ func main() {
 	s := grpc.NewServer()
 
 	//サーバーにarticleサービスを登録
-	pb.RegisterAccountServiceServer(s, &server{})
+	pb.RegisterArticleServiceServer(s, &server{})
 
 	//articleサーバーを起動
 	if err := s.Serve(lis); err != nil {
 		log.Fatalf("Failed to server: %v", err)
 	}
 
+}
+
+func (*server) CreateArticle(ctx context.Context, req *pb.CreateArticleRequest) (*pb.CreateArticleResponse, error) {
+	input := req.GetCreateInput()
+
+	cmd := "INSERT INTO articles(author, title, content) VALUES (?, ?, ?)"
+	r, err := db.Exec(cmd, input.Author, input.Title, input.Content)
+	if err != nil {
+		return nil, err
+	}
+	id, err := r.LastInsertId()
+	if err != nil {
+		return nil, err
+	}
+	return &pb.CreateArticleResponse{
+		Article: &pb.Article{
+			Id:      id,
+			Author:  input.Author,
+			Title:   input.Title,
+			Content: input.Content,
+		},
+	}, nil
 }

@@ -7,6 +7,10 @@
 package pb
 
 import (
+	context "context"
+	grpc "google.golang.org/grpc"
+	codes "google.golang.org/grpc/codes"
+	status "google.golang.org/grpc/status"
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
 	reflect "reflect"
@@ -530,6 +534,91 @@ func (x *DeleteArticleRequest) GetId() string {
 	return ""
 }
 
+type ListArticleRequest struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+}
+
+func (x *ListArticleRequest) Reset() {
+	*x = ListArticleRequest{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_article_article_proto_msgTypes[10]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *ListArticleRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*ListArticleRequest) ProtoMessage() {}
+
+func (x *ListArticleRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_article_article_proto_msgTypes[10]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use ListArticleRequest.ProtoReflect.Descriptor instead.
+func (*ListArticleRequest) Descriptor() ([]byte, []int) {
+	return file_article_article_proto_rawDescGZIP(), []int{10}
+}
+
+type ListArticleResponse struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	Articles []*Article `protobuf:"bytes,1,rep,name=articles,proto3" json:"articles,omitempty"`
+}
+
+func (x *ListArticleResponse) Reset() {
+	*x = ListArticleResponse{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_article_article_proto_msgTypes[11]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *ListArticleResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*ListArticleResponse) ProtoMessage() {}
+
+func (x *ListArticleResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_article_article_proto_msgTypes[11]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use ListArticleResponse.ProtoReflect.Descriptor instead.
+func (*ListArticleResponse) Descriptor() ([]byte, []int) {
+	return file_article_article_proto_rawDescGZIP(), []int{11}
+}
+
+func (x *ListArticleResponse) GetArticles() []*Article {
+	if x != nil {
+		return x.Articles
+	}
+	return nil
+}
+
 var File_article_article_proto protoreflect.FileDescriptor
 
 var file_article_article_proto_rawDesc = []byte{
@@ -576,8 +665,39 @@ var file_article_article_proto_rawDesc = []byte{
 	0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x02, 0x69, 0x64, 0x22, 0x26, 0x0a, 0x14, 0x44, 0x65,
 	0x6c, 0x65, 0x74, 0x65, 0x41, 0x72, 0x74, 0x69, 0x63, 0x6c, 0x65, 0x52, 0x65, 0x71, 0x75, 0x65,
 	0x73, 0x74, 0x12, 0x0e, 0x0a, 0x02, 0x69, 0x64, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x02,
-	0x69, 0x64, 0x42, 0x0c, 0x5a, 0x0a, 0x61, 0x72, 0x74, 0x69, 0x63, 0x6c, 0x65, 0x2f, 0x70, 0x62,
-	0x62, 0x06, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x33,
+	0x69, 0x64, 0x22, 0x14, 0x0a, 0x12, 0x4c, 0x69, 0x73, 0x74, 0x41, 0x72, 0x74, 0x69, 0x63, 0x6c,
+	0x65, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x22, 0x43, 0x0a, 0x13, 0x4c, 0x69, 0x73, 0x74,
+	0x41, 0x72, 0x74, 0x69, 0x63, 0x6c, 0x65, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12,
+	0x2c, 0x0a, 0x08, 0x61, 0x72, 0x74, 0x69, 0x63, 0x6c, 0x65, 0x73, 0x18, 0x01, 0x20, 0x03, 0x28,
+	0x0b, 0x32, 0x10, 0x2e, 0x61, 0x72, 0x74, 0x69, 0x63, 0x6c, 0x65, 0x2e, 0x41, 0x72, 0x74, 0x69,
+	0x63, 0x6c, 0x65, 0x52, 0x08, 0x61, 0x72, 0x74, 0x69, 0x63, 0x6c, 0x65, 0x73, 0x32, 0x94, 0x03,
+	0x0a, 0x0e, 0x41, 0x72, 0x74, 0x69, 0x63, 0x6c, 0x65, 0x53, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65,
+	0x12, 0x4e, 0x0a, 0x0d, 0x43, 0x72, 0x65, 0x61, 0x74, 0x65, 0x41, 0x72, 0x74, 0x69, 0x63, 0x6c,
+	0x65, 0x12, 0x1d, 0x2e, 0x61, 0x72, 0x74, 0x69, 0x63, 0x6c, 0x65, 0x2e, 0x43, 0x72, 0x65, 0x61,
+	0x74, 0x65, 0x41, 0x72, 0x74, 0x69, 0x63, 0x6c, 0x65, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74,
+	0x1a, 0x1e, 0x2e, 0x61, 0x72, 0x74, 0x69, 0x63, 0x6c, 0x65, 0x2e, 0x43, 0x72, 0x65, 0x61, 0x74,
+	0x65, 0x41, 0x72, 0x74, 0x69, 0x63, 0x6c, 0x65, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65,
+	0x12, 0x48, 0x0a, 0x0b, 0x52, 0x65, 0x61, 0x64, 0x41, 0x72, 0x74, 0x69, 0x63, 0x6c, 0x65, 0x12,
+	0x1b, 0x2e, 0x61, 0x72, 0x74, 0x69, 0x63, 0x6c, 0x65, 0x2e, 0x52, 0x65, 0x61, 0x64, 0x41, 0x72,
+	0x74, 0x69, 0x63, 0x6c, 0x65, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x1c, 0x2e, 0x61,
+	0x72, 0x74, 0x69, 0x63, 0x6c, 0x65, 0x2e, 0x52, 0x65, 0x61, 0x64, 0x41, 0x72, 0x74, 0x69, 0x63,
+	0x6c, 0x65, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x4e, 0x0a, 0x0d, 0x55, 0x70,
+	0x64, 0x61, 0x74, 0x65, 0x41, 0x72, 0x74, 0x69, 0x63, 0x6c, 0x65, 0x12, 0x1d, 0x2e, 0x61, 0x72,
+	0x74, 0x69, 0x63, 0x6c, 0x65, 0x2e, 0x55, 0x70, 0x64, 0x61, 0x74, 0x65, 0x41, 0x72, 0x74, 0x69,
+	0x63, 0x6c, 0x65, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x1e, 0x2e, 0x61, 0x72, 0x74,
+	0x69, 0x63, 0x6c, 0x65, 0x2e, 0x55, 0x70, 0x64, 0x61, 0x74, 0x65, 0x41, 0x72, 0x74, 0x69, 0x63,
+	0x6c, 0x65, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x4e, 0x0a, 0x0d, 0x44, 0x65,
+	0x6c, 0x65, 0x74, 0x65, 0x41, 0x72, 0x74, 0x69, 0x63, 0x6c, 0x65, 0x12, 0x1d, 0x2e, 0x61, 0x72,
+	0x74, 0x69, 0x63, 0x6c, 0x65, 0x2e, 0x44, 0x65, 0x6c, 0x65, 0x74, 0x65, 0x41, 0x72, 0x74, 0x69,
+	0x63, 0x6c, 0x65, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x1e, 0x2e, 0x61, 0x72, 0x74,
+	0x69, 0x63, 0x6c, 0x65, 0x2e, 0x44, 0x65, 0x6c, 0x65, 0x74, 0x65, 0x41, 0x72, 0x74, 0x69, 0x63,
+	0x6c, 0x65, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x48, 0x0a, 0x0b, 0x4c, 0x69,
+	0x73, 0x74, 0x41, 0x72, 0x74, 0x69, 0x63, 0x6c, 0x65, 0x12, 0x1b, 0x2e, 0x61, 0x72, 0x74, 0x69,
+	0x63, 0x6c, 0x65, 0x2e, 0x4c, 0x69, 0x73, 0x74, 0x41, 0x72, 0x74, 0x69, 0x63, 0x6c, 0x65, 0x52,
+	0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x1c, 0x2e, 0x61, 0x72, 0x74, 0x69, 0x63, 0x6c, 0x65,
+	0x2e, 0x4c, 0x69, 0x73, 0x74, 0x41, 0x72, 0x74, 0x69, 0x63, 0x6c, 0x65, 0x52, 0x65, 0x73, 0x70,
+	0x6f, 0x6e, 0x73, 0x65, 0x42, 0x0c, 0x5a, 0x0a, 0x61, 0x72, 0x74, 0x69, 0x63, 0x6c, 0x65, 0x2f,
+	0x70, 0x62, 0x62, 0x06, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x33,
 }
 
 var (
@@ -592,7 +712,7 @@ func file_article_article_proto_rawDescGZIP() []byte {
 	return file_article_article_proto_rawDescData
 }
 
-var file_article_article_proto_msgTypes = make([]protoimpl.MessageInfo, 10)
+var file_article_article_proto_msgTypes = make([]protoimpl.MessageInfo, 12)
 var file_article_article_proto_goTypes = []interface{}{
 	(*Article)(nil),               // 0: article.Article
 	(*CreateInput)(nil),           // 1: article.CreateInput
@@ -604,18 +724,31 @@ var file_article_article_proto_goTypes = []interface{}{
 	(*UpdateArticleResponse)(nil), // 7: article.UpdateArticleResponse
 	(*DeleteArticleResponse)(nil), // 8: article.DeleteArticleResponse
 	(*DeleteArticleRequest)(nil),  // 9: article.DeleteArticleRequest
+	(*ListArticleRequest)(nil),    // 10: article.ListArticleRequest
+	(*ListArticleResponse)(nil),   // 11: article.ListArticleResponse
 }
 var file_article_article_proto_depIdxs = []int32{
-	1, // 0: article.CreateArticleRequest.createInput:type_name -> article.CreateInput
-	0, // 1: article.CreateArticleResponse.article:type_name -> article.Article
-	0, // 2: article.ReadArticleResponse.article:type_name -> article.Article
-	0, // 3: article.UpdateArticleRequest.article:type_name -> article.Article
-	0, // 4: article.UpdateArticleResponse.article:type_name -> article.Article
-	5, // [5:5] is the sub-list for method output_type
-	5, // [5:5] is the sub-list for method input_type
-	5, // [5:5] is the sub-list for extension type_name
-	5, // [5:5] is the sub-list for extension extendee
-	0, // [0:5] is the sub-list for field type_name
+	1,  // 0: article.CreateArticleRequest.createInput:type_name -> article.CreateInput
+	0,  // 1: article.CreateArticleResponse.article:type_name -> article.Article
+	0,  // 2: article.ReadArticleResponse.article:type_name -> article.Article
+	0,  // 3: article.UpdateArticleRequest.article:type_name -> article.Article
+	0,  // 4: article.UpdateArticleResponse.article:type_name -> article.Article
+	0,  // 5: article.ListArticleResponse.articles:type_name -> article.Article
+	2,  // 6: article.ArticleService.CreateArticle:input_type -> article.CreateArticleRequest
+	4,  // 7: article.ArticleService.ReadArticle:input_type -> article.ReadArticleRequest
+	6,  // 8: article.ArticleService.UpdateArticle:input_type -> article.UpdateArticleRequest
+	9,  // 9: article.ArticleService.DeleteArticle:input_type -> article.DeleteArticleRequest
+	10, // 10: article.ArticleService.ListArticle:input_type -> article.ListArticleRequest
+	3,  // 11: article.ArticleService.CreateArticle:output_type -> article.CreateArticleResponse
+	5,  // 12: article.ArticleService.ReadArticle:output_type -> article.ReadArticleResponse
+	7,  // 13: article.ArticleService.UpdateArticle:output_type -> article.UpdateArticleResponse
+	8,  // 14: article.ArticleService.DeleteArticle:output_type -> article.DeleteArticleResponse
+	11, // 15: article.ArticleService.ListArticle:output_type -> article.ListArticleResponse
+	11, // [11:16] is the sub-list for method output_type
+	6,  // [6:11] is the sub-list for method input_type
+	6,  // [6:6] is the sub-list for extension type_name
+	6,  // [6:6] is the sub-list for extension extendee
+	0,  // [0:6] is the sub-list for field type_name
 }
 
 func init() { file_article_article_proto_init() }
@@ -744,6 +877,30 @@ func file_article_article_proto_init() {
 				return nil
 			}
 		}
+		file_article_article_proto_msgTypes[10].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*ListArticleRequest); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_article_article_proto_msgTypes[11].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*ListArticleResponse); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
 	}
 	type x struct{}
 	out := protoimpl.TypeBuilder{
@@ -751,9 +908,9 @@ func file_article_article_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: file_article_article_proto_rawDesc,
 			NumEnums:      0,
-			NumMessages:   10,
+			NumMessages:   12,
 			NumExtensions: 0,
-			NumServices:   0,
+			NumServices:   1,
 		},
 		GoTypes:           file_article_article_proto_goTypes,
 		DependencyIndexes: file_article_article_proto_depIdxs,
@@ -763,4 +920,228 @@ func file_article_article_proto_init() {
 	file_article_article_proto_rawDesc = nil
 	file_article_article_proto_goTypes = nil
 	file_article_article_proto_depIdxs = nil
+}
+
+// Reference imports to suppress errors if they are not otherwise used.
+var _ context.Context
+var _ grpc.ClientConnInterface
+
+// This is a compile-time assertion to ensure that this generated file
+// is compatible with the grpc package it is being compiled against.
+const _ = grpc.SupportPackageIsVersion6
+
+// ArticleServiceClient is the client API for ArticleService service.
+//
+// For semantics around ctx use and closing/ending streaming RPCs, please refer to https://godoc.org/google.golang.org/grpc#ClientConn.NewStream.
+type ArticleServiceClient interface {
+	CreateArticle(ctx context.Context, in *CreateArticleRequest, opts ...grpc.CallOption) (*CreateArticleResponse, error)
+	ReadArticle(ctx context.Context, in *ReadArticleRequest, opts ...grpc.CallOption) (*ReadArticleResponse, error)
+	UpdateArticle(ctx context.Context, in *UpdateArticleRequest, opts ...grpc.CallOption) (*UpdateArticleResponse, error)
+	DeleteArticle(ctx context.Context, in *DeleteArticleRequest, opts ...grpc.CallOption) (*DeleteArticleResponse, error)
+	ListArticle(ctx context.Context, in *ListArticleRequest, opts ...grpc.CallOption) (*ListArticleResponse, error)
+}
+
+type articleServiceClient struct {
+	cc grpc.ClientConnInterface
+}
+
+func NewArticleServiceClient(cc grpc.ClientConnInterface) ArticleServiceClient {
+	return &articleServiceClient{cc}
+}
+
+func (c *articleServiceClient) CreateArticle(ctx context.Context, in *CreateArticleRequest, opts ...grpc.CallOption) (*CreateArticleResponse, error) {
+	out := new(CreateArticleResponse)
+	err := c.cc.Invoke(ctx, "/article.ArticleService/CreateArticle", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *articleServiceClient) ReadArticle(ctx context.Context, in *ReadArticleRequest, opts ...grpc.CallOption) (*ReadArticleResponse, error) {
+	out := new(ReadArticleResponse)
+	err := c.cc.Invoke(ctx, "/article.ArticleService/ReadArticle", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *articleServiceClient) UpdateArticle(ctx context.Context, in *UpdateArticleRequest, opts ...grpc.CallOption) (*UpdateArticleResponse, error) {
+	out := new(UpdateArticleResponse)
+	err := c.cc.Invoke(ctx, "/article.ArticleService/UpdateArticle", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *articleServiceClient) DeleteArticle(ctx context.Context, in *DeleteArticleRequest, opts ...grpc.CallOption) (*DeleteArticleResponse, error) {
+	out := new(DeleteArticleResponse)
+	err := c.cc.Invoke(ctx, "/article.ArticleService/DeleteArticle", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *articleServiceClient) ListArticle(ctx context.Context, in *ListArticleRequest, opts ...grpc.CallOption) (*ListArticleResponse, error) {
+	out := new(ListArticleResponse)
+	err := c.cc.Invoke(ctx, "/article.ArticleService/ListArticle", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+// ArticleServiceServer is the server API for ArticleService service.
+type ArticleServiceServer interface {
+	CreateArticle(context.Context, *CreateArticleRequest) (*CreateArticleResponse, error)
+	ReadArticle(context.Context, *ReadArticleRequest) (*ReadArticleResponse, error)
+	UpdateArticle(context.Context, *UpdateArticleRequest) (*UpdateArticleResponse, error)
+	DeleteArticle(context.Context, *DeleteArticleRequest) (*DeleteArticleResponse, error)
+	ListArticle(context.Context, *ListArticleRequest) (*ListArticleResponse, error)
+}
+
+// UnimplementedArticleServiceServer can be embedded to have forward compatible implementations.
+type UnimplementedArticleServiceServer struct {
+}
+
+func (*UnimplementedArticleServiceServer) CreateArticle(context.Context, *CreateArticleRequest) (*CreateArticleResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method CreateArticle not implemented")
+}
+func (*UnimplementedArticleServiceServer) ReadArticle(context.Context, *ReadArticleRequest) (*ReadArticleResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method ReadArticle not implemented")
+}
+func (*UnimplementedArticleServiceServer) UpdateArticle(context.Context, *UpdateArticleRequest) (*UpdateArticleResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method UpdateArticle not implemented")
+}
+func (*UnimplementedArticleServiceServer) DeleteArticle(context.Context, *DeleteArticleRequest) (*DeleteArticleResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method DeleteArticle not implemented")
+}
+func (*UnimplementedArticleServiceServer) ListArticle(context.Context, *ListArticleRequest) (*ListArticleResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method ListArticle not implemented")
+}
+
+func RegisterArticleServiceServer(s *grpc.Server, srv ArticleServiceServer) {
+	s.RegisterService(&_ArticleService_serviceDesc, srv)
+}
+
+func _ArticleService_CreateArticle_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(CreateArticleRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ArticleServiceServer).CreateArticle(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/article.ArticleService/CreateArticle",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ArticleServiceServer).CreateArticle(ctx, req.(*CreateArticleRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _ArticleService_ReadArticle_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ReadArticleRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ArticleServiceServer).ReadArticle(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/article.ArticleService/ReadArticle",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ArticleServiceServer).ReadArticle(ctx, req.(*ReadArticleRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _ArticleService_UpdateArticle_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(UpdateArticleRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ArticleServiceServer).UpdateArticle(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/article.ArticleService/UpdateArticle",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ArticleServiceServer).UpdateArticle(ctx, req.(*UpdateArticleRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _ArticleService_DeleteArticle_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(DeleteArticleRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ArticleServiceServer).DeleteArticle(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/article.ArticleService/DeleteArticle",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ArticleServiceServer).DeleteArticle(ctx, req.(*DeleteArticleRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _ArticleService_ListArticle_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ListArticleRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ArticleServiceServer).ListArticle(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/article.ArticleService/ListArticle",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ArticleServiceServer).ListArticle(ctx, req.(*ListArticleRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+var _ArticleService_serviceDesc = grpc.ServiceDesc{
+	ServiceName: "article.ArticleService",
+	HandlerType: (*ArticleServiceServer)(nil),
+	Methods: []grpc.MethodDesc{
+		{
+			MethodName: "CreateArticle",
+			Handler:    _ArticleService_CreateArticle_Handler,
+		},
+		{
+			MethodName: "ReadArticle",
+			Handler:    _ArticleService_ReadArticle_Handler,
+		},
+		{
+			MethodName: "UpdateArticle",
+			Handler:    _ArticleService_UpdateArticle_Handler,
+		},
+		{
+			MethodName: "DeleteArticle",
+			Handler:    _ArticleService_DeleteArticle_Handler,
+		},
+		{
+			MethodName: "ListArticle",
+			Handler:    _ArticleService_ListArticle_Handler,
+		},
+	},
+	Streams:  []grpc.StreamDesc{},
+	Metadata: "article/article.proto",
 }

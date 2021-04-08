@@ -47,3 +47,21 @@ message DeleteArticleResponse {
 message DeleteArticleRequest {
     string id = 1;
 }
+
+message ListArticleRequest {
+
+}
+
+message ListArticleResponse {
+    repeated Article articles = 1;
+}
+
+service ArticleService {
+    rpc CreateArticle(CreateArticleRequest) returns(CreateArticleResponse);
+    rpc ReadArticle(ReadArticleRequest) returns(ReadArticleResponse);
+    rpc UpdateArticle(UpdateArticleRequest) returns(UpdateArticleResponse);
+    rpc DeleteArticle(DeleteArticleRequest) returns(DeleteArticleResponse);
+    rpc ListArticle(ListArticleRequest) returns(ListArticleResponse);
+
+
+}
