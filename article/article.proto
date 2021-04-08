@@ -25,7 +25,7 @@ message CreateArticleResponse {
 }
 
 message ReadArticleRequest {
-    string id = 1;
+    int64 id = 1;
 }
 
 message ReadArticleResponse {
@@ -41,11 +41,11 @@ message UpdateArticleResponse {
 }
 
 message DeleteArticleResponse {
-    string id = 1;
+    int64 id = 1;
 }
 
 message DeleteArticleRequest {
-    string id = 1;
+    int64 id = 1;
 }
 
 message ListArticleRequest {

@@ -32,6 +32,10 @@ func (c *Client) Close() {
 	c.conn.Close()
 }
 
+func main() {
+
+}
+
 func (c *Client) CreateArticle(ctx context.Context, input *pb.CreateInput) (*Article, error) {
 	r, err := c.service.CreateArticle(
 		ctx,

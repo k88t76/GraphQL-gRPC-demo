@@ -36,20 +36,27 @@ func (c *Client) Close() {
 
 func main() {
 	c, _ := NewClient("localhost:8080")
-	input := &pb.CreateInput{
+	/*input := &pb.CreateInput{
 		Author:  "gopher",
-		Title:   "gRPC",
-		Content: "gRPC is so cool!",
+		Title:   "gRPC-3",
+		Content: "gRPC is so nice!",
 	}
 	res, err := c.service.CreateArticle(context.Background(), &pb.CreateArticleRequest{CreateInput: input})
 	if err != nil {
 		log.Fatal(err)
 	}
 	fmt.Printf("CreateArticle Response: %v", res)
+	*/
+	var id int64 = 1
+	res, err := c.service.ReadArticle(context.Background(), &pb.ReadArticleRequest{Id: id})
+	if err != nil {
+		log.Fatal(err)
+	}
+	fmt.Printf("ReadArticle Response: %v\n", res)
 }
 
 func (c *Client) CreateArticle(ctx context.Context, input *pb.CreateInput) (*Article, error) {
-	r, err := c.service.CreateArticle(
+	res, err := c.service.CreateArticle(
 		ctx,
 		&pb.CreateArticleRequest{CreateInput: input},
 	)
@@ -57,9 +64,22 @@ func (c *Client) CreateArticle(ctx context.Context, input *pb.CreateInput) (*Art
 		return nil, err
 	}
 	return &Article{
-		ID:      r.Article.Id,
-		Author:  r.Article.Author,
-		Title:   r.Article.Title,
-		Content: r.Article.Content,
+		ID:      res.Article.Id,
+		Author:  res.Article.Author,
+		Title:   res.Article.Title,
+		Content: res.Article.Content,
+	}, nil
+}
+
+func (c *Client) ReadArticle(ctx context.Context, id int64) (*Article, error) {
+	res, err := c.service.ReadArticle(ctx, &pb.ReadArticleRequest{Id: id})
+	if err != nil {
+		return nil, err
+	}
+	return &Article{
+		ID:      res.Article.Id,
+		Author:  res.Article.Author,
+		Title:   res.Article.Title,
+		Content: res.Article.Content,
 	}, nil
 }
