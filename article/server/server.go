@@ -119,3 +119,14 @@ func (*server) UpdateArticle(ctx context.Context, req *pb.UpdateArticleRequest) 
 		},
 	}, nil
 }
+
+func (*server) DeleteArticle(ctx context.Context, req *pb.DeleteArticleRequest) (*pb.DeleteArticleResponse, error) {
+	id := req.GetId()
+	cmd := "DELETE FROM articles WHERE id = ?"
+	_, err := db.Exec(cmd, id)
+	if err != nil {
+		return nil, err
+	}
+
+	return &pb.DeleteArticleResponse{Id: id}, nil
+}
