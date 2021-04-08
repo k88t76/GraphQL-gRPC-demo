@@ -70,8 +70,15 @@ func (m *mutationResolver) UpdateArticle(ctx context.Context, input model.Update
 	}, nil
 }
 
-func (m *mutationResolver) DeleteArticle(ctx context.Context, id int) (*model.Article, error) {
-	return nil, nil
+func (m *mutationResolver) DeleteArticle(ctx context.Context, id int) (int, error) {
+	ctx, cancel := context.WithTimeout(ctx, 3*time.Second)
+	defer cancel()
+
+	articleId, err := m.Server.ArticleClient.DeleteArticle(ctx, int64(id))
+	if err != nil {
+		return 0, err
+	}
+	return int(articleId), nil
 }
 
 type queryResolver struct{ *Resolver }

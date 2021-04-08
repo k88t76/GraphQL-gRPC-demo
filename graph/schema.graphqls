@@ -26,5 +26,5 @@ input UpdateInput {
 type Mutation {
   createArticle(input: CreateInput!): Article!
   updateArticle(input: UpdateInput!): Article!
-  deleteArticle(input: Int!): Article!
+  deleteArticle(input: Int!): Int!
 }

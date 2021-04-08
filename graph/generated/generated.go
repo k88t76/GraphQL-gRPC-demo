@@ -65,7 +65,7 @@ type ComplexityRoot struct {
 type MutationResolver interface {
 	CreateArticle(ctx context.Context, input model.CreateInput) (*model.Article, error)
 	UpdateArticle(ctx context.Context, input model.UpdateInput) (*model.Article, error)
-	DeleteArticle(ctx context.Context, input int) (*model.Article, error)
+	DeleteArticle(ctx context.Context, input int) (int, error)
 }
 type QueryResolver interface {
 	Article(ctx context.Context, input int) (*model.Article, error)
@@ -262,7 +262,7 @@ input UpdateInput {
 type Mutation {
   createArticle(input: CreateInput!): Article!
   updateArticle(input: UpdateInput!): Article!
-  deleteArticle(input: Int!): Article!
+  deleteArticle(input: Int!): Int!
 }`, BuiltIn: false},
 }
 var parsedSchema = gqlparser.MustLoadSchema(sources...)
@@ -645,9 +645,9 @@ func (ec *executionContext) _Mutation_deleteArticle(ctx context.Context, field g
 		}
 		return graphql.Null
 	}
-	res := resTmp.(*model.Article)
+	res := resTmp.(int)
 	fc.Result = res
-	return ec.marshalNArticle2ᚖgithubᚗcomᚋk88t76ᚋGraphQLᚑgRPCᚑdemoᚋgraphᚋmodelᚐArticle(ctx, field.Selections, res)
+	return ec.marshalNInt2int(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _Query_article(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
