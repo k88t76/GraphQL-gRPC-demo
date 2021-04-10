@@ -10,14 +10,14 @@ message Article {
     string content = 4;
 }
 
-message CreateInput {
+message ArticleInput {
     string author = 1;
     string title = 2;
     string content = 3;
 }
 
 message CreateArticleRequest {
-    CreateInput createInput = 1;
+    ArticleInput articleInput = 1;
 }
 
 message CreateArticleResponse {
@@ -33,7 +33,8 @@ message ReadArticleResponse {
 }
 
 message UpdateArticleRequest {
-    Article article = 1;
+    int64 id = 1;
+    ArticleInput articleInput = 2;
 }
 
 message UpdateArticleResponse {
@@ -62,6 +63,4 @@ service ArticleService {
     rpc UpdateArticle(UpdateArticleRequest) returns(UpdateArticleResponse);
     rpc DeleteArticle(DeleteArticleRequest) returns(DeleteArticleResponse);
     rpc ListArticle(ListArticleRequest) returns(stream ListArticleResponse);
-
-
 }
