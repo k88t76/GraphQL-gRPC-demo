@@ -5,25 +5,14 @@ import (
 	"net/http"
 	"os"
 
-	"github.com/99designs/gqlgen/handler"
-	article "github.com/k88t76/GraphQL-gRPC-demo/article/client"
+	"github.com/99designs/gqlgen/graphql/handler"
+	"github.com/99designs/gqlgen/graphql/playground"
+	"github.com/k88t76/GraphQL-gRPC-demo/article/client"
 	"github.com/k88t76/GraphQL-gRPC-demo/graph"
+	"github.com/k88t76/GraphQL-gRPC-demo/graph/generated"
 )
 
 const defaultPort = "8000"
-
-func NewGraphQLServer(url string) (*graph.Resolver, error) {
-	// articleサービスに接続
-	articleClient, err := article.NewClient(url)
-	if err != nil {
-		articleClient.Close()
-		return nil, err
-	}
-	return &graph.Resolver{
-		Server: &graph.Server{
-			ArticleClient: articleClient,
-		}}, nil
-}
 
 func main() {
 	port := os.Getenv("PORT")
@@ -31,12 +20,21 @@ func main() {
 		port = defaultPort
 	}
 
-	s, err := NewGraphQLServer("localhost:8080")
+	articleClient, err := client.NewClient("localhost:8080")
 	if err != nil {
-		log.Fatal(err)
+		articleClient.Close()
+		log.Fatalf("Failed to create article client: %v\n", err)
 	}
-	http.Handle("/query", handler.GraphQL(s.ToExecutableShema()))
-	http.Handle("/", handler.Playground("Article", "/query"))
+
+	srv := handler.NewDefaultServer(
+		generated.NewExecutableSchema(
+			generated.Config{
+				Resolvers: &graph.Resolver{
+					ArticleClient: articleClient,
+				}}))
+
+	http.Handle("/", playground.Handler("GraphQL playground", "/query"))
+	http.Handle("/query", srv)
 
 	log.Printf("connect to http://localhost:%s/ for GraphQL playground", port)
 	log.Fatal(http.ListenAndServe(":"+port, nil))

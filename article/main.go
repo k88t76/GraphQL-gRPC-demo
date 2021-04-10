@@ -1,12 +1,8 @@
 package main
 
-import (
-	"github.com/k88t76/GraphQL-gRPC-demo/article/client"
-)
-
 // gRPCサーバーの動作確認用
 func main() {
-	c, _ := client.NewClient("localhost:8080")
+	//c, _ := client.NewClient("localhost:8080")
 
 	// 記事をCREATE
 	/*

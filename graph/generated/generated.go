@@ -235,34 +235,34 @@ func (ec *executionContext) introspectType(name string) (*introspection.Type, er
 
 var sources = []*ast.Source{
 	{Name: "graph/schema.graphqls", Input: `type Article {
-  id: Int!
-  author: String!
-  title: String!
-  content: String!
+    id: Int!
+    author: String!
+    title: String!
+    content: String!
 }
 
 type Query {
-  article(input: Int!): Article!
-  articles: [Article!]!
+    article(input: Int!): Article!
+    articles: [Article!]!
 }
 
 input CreateInput {
-  author: String!
-  title: String!
-  content: String!
+    author: String!
+    title: String!
+    content: String!
 }
 
 input UpdateInput {
-  id: Int!
-  author: String!
-  title: String!
-  content: String!
+    id: Int!
+    author: String!
+    title: String!
+    content: String!
 }
 
 type Mutation {
-  createArticle(input: CreateInput!): Article!
-  updateArticle(input: UpdateInput!): Article!
-  deleteArticle(input: Int!): Int!
+    createArticle(input: CreateInput!): Article!
+    updateArticle(input: UpdateInput!): Article!
+    deleteArticle(input: Int!): Int!
 }`, BuiltIn: false},
 }
 var parsedSchema = gqlparser.MustLoadSchema(sources...)

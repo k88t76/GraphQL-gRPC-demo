@@ -24,8 +24,8 @@ func main() {
 	if err != nil {
 		log.Fatalf("Failed to create new sqlite repository: %v\n", err)
 	}
-
 	service := service.NewService(repository)
+
 	//サーバーにarticleサービスを登録
 	server := grpc.NewServer()
 	pb.RegisterArticleServiceServer(server, service)
