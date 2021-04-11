@@ -15,10 +15,13 @@ type Client struct {
 }
 
 func NewClient(url string) (*Client, error) {
+	// client connectionを生成
 	conn, err := grpc.Dial(url, grpc.WithInsecure())
 	if err != nil {
 		return nil, err
 	}
+
+	// articleサービスのクライアントを生成
 	c := pb.NewArticleServiceClient(conn)
 	return &Client{conn, c}, nil
 }

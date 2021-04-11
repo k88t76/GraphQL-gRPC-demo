@@ -1,3 +1,4 @@
+# articleサービスとやり取りする記事の型定義
 type Article {
     id: Int!
     author: String!
@@ -5,17 +6,14 @@ type Article {
     content: String!
 }
 
-type Query {
-    article(input: Int!): Article!
-    articles: [Article!]!
-}
-
+# CREATEのためのinputを定義
 input CreateInput {
     author: String!
     title: String!
     content: String!
 }
 
+# UPDATEのためのinputを定義
 input UpdateInput {
     id: Int!
     author: String!
@@ -23,8 +21,15 @@ input UpdateInput {
     content: String!
 }
 
+# mutationの定義(CREATE, UPDATE, DELETEを行う)
 type Mutation {
     createArticle(input: CreateInput!): Article!
     updateArticle(input: UpdateInput!): Article!
     deleteArticle(input: Int!): Int!
+}
+
+# queryの定義(article → READ, articles → 全取得)
+type Query {
+    article(input: Int!): Article!
+    articles: [Article!]!
 }

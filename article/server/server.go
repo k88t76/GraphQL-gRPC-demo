@@ -13,7 +13,7 @@ import (
 func main() {
 
 	// articleサーバーに接続
-	lis, err := net.Listen("tcp", ":8080")
+	lis, err := net.Listen("tcp", ":50051")
 	if err != nil {
 		log.Fatalf("Failed to listen: %v\n", err)
 	}
@@ -22,7 +22,7 @@ func main() {
 	// RepositoryとServiceを作成
 	repository, err := repository.NewsqliteRepo()
 	if err != nil {
-		log.Fatalf("Failed to create new sqlite repository: %v\n", err)
+		log.Fatalf("Failed to create sqlite repository: %v\n", err)
 	}
 	service := service.NewService(repository)
 
@@ -31,9 +31,8 @@ func main() {
 	pb.RegisterArticleServiceServer(server, service)
 
 	//articleサーバーを起動
-	log.Println("Listening on port 8080...")
+	log.Println("Listening on port 50051...")
 	if err := server.Serve(lis); err != nil {
-		log.Fatalf("Failed to server: %v", err)
+		log.Fatalf("Failed to serve: %v", err)
 	}
-
 }

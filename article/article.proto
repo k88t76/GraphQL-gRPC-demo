@@ -3,6 +3,7 @@ syntax = "proto3";
 package article;
 option go_package = "article/pb";
 
+// やり取りする記事の型定義
 message Article {
     int64 id = 1;
     string author = 2;
@@ -10,53 +11,65 @@ message Article {
     string content = 4;
 }
 
+// CREATEとUPDATEにおける入力のための型
 message ArticleInput {
     string author = 1;
     string title = 2;
     string content = 3;
 }
 
+// CREATEする記事の内容(author, title, content)を受け取る
 message CreateArticleRequest {
     ArticleInput articleInput = 1;
 }
 
+// CREATEした記事を返す
 message CreateArticleResponse {
     Article article = 1;
 }
 
+// READする記事のIDを受け取る
 message ReadArticleRequest {
     int64 id = 1;
 }
 
+// 該当するIDの記事を返す
 message ReadArticleResponse {
     Article article = 1;
 }
 
+// UPDATEする記事のIDと変更内容を受け取る
 message UpdateArticleRequest {
     int64 id = 1;
     ArticleInput articleInput = 2;
 }
 
+// UPDATEした記事を返す 
 message UpdateArticleResponse {
     Article article = 1;
 }
 
+// DELETEする記事のIDを受け取る
 message DeleteArticleResponse {
     int64 id = 1;
 }
 
+// DELETEした記事のIDを返す
 message DeleteArticleRequest {
     int64 id = 1;
 }
 
+// 全取得の際、入力は無し
 message ListArticleRequest {
 
 }
 
+// 全取得した記事を１つずつ返すので、配列(repeated)の形ではなくArticle1つを返す形
 message ListArticleResponse {
     Article article = 1;
 }
 
+// articleサービスを定義
 service ArticleService {
     rpc CreateArticle(CreateArticleRequest) returns(CreateArticleResponse);
     rpc ReadArticle(ReadArticleRequest) returns(ReadArticleResponse);
